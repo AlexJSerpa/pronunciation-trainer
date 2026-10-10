@@ -115,10 +115,22 @@ header h1 {
 }
 
 .step-locked {
-  opacity: 0.45;
-  pointer-events: none;
-  filter: grayscale(0.5);
-  background: #f6f8fa;
+  display: none !important;
+}
+
+.step-appear {
+  animation: fadeInSlideDown 0.35s ease-out forwards;
+}
+
+@keyframes fadeInSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .step-instruction {

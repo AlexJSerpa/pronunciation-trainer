@@ -110,6 +110,7 @@ function showCard(index) {
 
   // Lock Step 2 initially
   isWordVerified = false;
+  step2ContainerEl.classList.remove("step-appear");
   step2ContainerEl.classList.add("step-locked");
   recordBtn.disabled = true;
   targetSentenceEl.textContent = sentenceText;
@@ -245,9 +246,12 @@ function revealWord() {
 
 function unlockStep2() {
   step2ContainerEl.classList.remove("step-locked");
+  step2ContainerEl.classList.add("step-appear");
   recordBtn.disabled = false;
   // Smooth scroll to Step 2 if needed
-  step2ContainerEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  requestAnimationFrame(() => {
+    step2ContainerEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
 }
 
 // Audio Playback
@@ -442,6 +446,23 @@ function clearError() {
 }
 
 // Event Listeners
+// Live typing verification for Step 1
+wordInputEl.addEventListener("input", () => {
+  if (isWordVerified) return;
+  const typed = normalizeWord(wordInputEl.value);
+  if (!typed) return;
+
+  const expectedCloze = normalizeWord(clozeWord);
+  const expectedBase = normalizeWord(baseWord);
+
+  // If typed word exactly matches the cloze word or base word (when base form matches cloze form)
+  if (typed === expectedCloze) {
+    onWordCorrect(clozeWord || baseWord);
+  } else if (expectedBase && typed === expectedBase && expectedBase === expectedCloze) {
+    onWordCorrect(clozeWord || baseWord);
+  }
+});
+
 typingFormEl.addEventListener("submit", e => {
   e.preventDefault();
   checkWord();
