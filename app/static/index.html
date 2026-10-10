@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Pronunciation Trainer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Pronunciation Trainer</h1>
+      <div class="stats" id="cardCounter">Loading cards...</div>
+    </header>
+
+    <main>
+      <section class="card" aria-live="polite">
+        <div class="card-header">
+          <span class="card-id" id="cardIdBadge">#1</span>
+          <div class="card-nav-top">
+            <button id="prevBtn" class="btn btn-sm btn-outline" title="Previous card (Left Arrow)">&larr; Prev</button>
+            <button id="randomBtn" class="btn btn-sm btn-outline" title="Random card (Shortcut: R)">Random</button>
+            <button id="nextBtn" class="btn btn-sm btn-outline" title="Next card (Right Arrow)">Next &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 1: Type the missing word -->
+        <div class="step-container" id="step1Container">
+          <div class="step-badge">Step 1: Fill in the missing word</div>
+          
+          <div class="cloze-sentence" id="clozeSentence">
+            Loading sentence...
+          </div>
+
+          <div class="hint-container">
+            <span class="part-of-speech" id="partOfSpeech"></span>
+            <span class="definition-text" id="definitionText"></span>
+          </div>
+
+          <form id="typingForm" class="typing-form" onsubmit="return false;">
+            <div class="input-group">
+              <input 
+                type="text" 
+                id="wordInput" 
+                class="word-input" 
+                placeholder="Type the word here..." 
+                autocomplete="off" 
+                spellcheck="false" 
+                autocapitalize="off"
+              >
+              <button type="submit" id="checkWordBtn" class="btn btn-primary">Check</button>
+              <button type="button" id="revealWordBtn" class="btn btn-outline btn-reveal" title="Show answer">Reveal</button>
+            </div>
+            <div id="typingFeedback" class="typing-feedback" hidden></div>
+          </form>
+        </div>
+
+        <!-- Step 2: Practice Pronunciation -->
+        <div class="step-container step-locked" id="step2Container">
+          <div class="step-badge" id="step2Badge">Step 2: Read the sentence aloud</div>
+          
+          <div class="target-sentence-container">
+            <p class="step-instruction">Read the full sentence to practice your pronunciation:</p>
+            <div class="target-sentence" id="targetSentence">—</div>
+          </div>
+
+          <div class="audio-controls">
+            <button id="playSentenceAudioBtn" class="btn btn-secondary" title="Listen to native pronunciation (Shortcut: P)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Listen to Sentence
+            </button>
+            <button id="playWordAudioBtn" class="btn btn-secondary" title="Listen to word only">
+              Listen to Word
+            </button>
+          </div>
+
+          <div class="recording-section">
+            <div class="record-controls">
+              <button id="recordBtn" class="btn btn-record" title="Record your voice (Shortcut: Space)" disabled>
+                <span class="record-icon"></span>
+                <span id="recordBtnText">Record</span>
+              </button>
+              <div id="recordingTimer" class="recording-timer" hidden>00:00</div>
+            </div>
+
+            <div id="loadingStatus" class="status-msg" hidden>
+              <div class="spinner"></div>
+              <span>Transcribing sentence with Whisper...</span>
+            </div>
+
+            <div id="errorMessage" class="error-msg" hidden role="alert"></div>
+          </div>
+
+          <!-- Evaluation Feedback -->
+          <div class="feedback-section" id="feedbackSection" hidden>
+            <div class="feedback-header">
+              <h3>Pronunciation Score</h3>
+              <div class="score-badge" id="scoreBadge">0%</div>
+            </div>
+
+            <div class="result-box">
+              <label>Sentence Feedback:</label>
+              <div id="result" class="result-words"></div>
+            </div>
+
+            <div class="detail-row" id="heardRow">
+              <span class="detail-label">Whisper heard:</span>
+              <span id="heardText" class="detail-value"></span>
+            </div>
+
+            <div class="detail-row" id="extrasRow" hidden>
+              <span class="detail-label">Extra words spoken:</span>
+              <span id="extrasText" class="detail-value extra-words"></span>
+            </div>
+
+            <div class="playback-user-audio" id="userAudioContainer" hidden>
+              <label>Your recording:</label>
+              <audio id="userAudioPlayer" controls></audio>
+            </div>
+
+            <div class="legend">
+              <span class="legend-item"><span class="w-correct">green</span> = correct</span>
+              <span class="legend-item"><span class="w-close">yellow</span> = close</span>
+              <span class="legend-item"><span class="w-wrong">red (wavy)</span> = wrong</span>
+              <span class="legend-item"><span class="w-missing">red (dashed)</span> = missing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button id="nextCardBottomBtn" class="btn btn-primary btn-next-card" title="Go to next card">Next Card &rarr;</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Local Speech Recognition powered by faster-whisper. All data stays on your machine.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
